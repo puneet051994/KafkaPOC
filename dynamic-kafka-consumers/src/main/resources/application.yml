@@ -1,5 +1,22 @@
 kafka:
   bootstrap-servers: localhost:9092
+  security:
+    # protocol: SSL or SASL_SSL
+    protocol: SSL
+    # Truststore (if using custom certs)
+    ssl-truststore-location: "/path/to/truststore.jks"
+    ssl-truststore-password: "changeit"
+    ssl-truststore-type: "JKS"
+    # Keystore (if mutual TLS is required)
+    ssl-keystore-location: "/path/to/keystore.jks"
+    ssl-keystore-password: "changeit"
+    ssl-keystore-type: "JKS"
+    ssl-key-password: "changeit"
+    # Disable hostname verification if needed (not recommended for prod)
+    ssl-endpoint-identification-algorithm: "HTTPS"
+    # For SASL (uncomment if using SASL_SSL)
+    # sasl-mechanism: PLAIN
+    # sasl-jaas-config: org.apache.kafka.common.security.plain.PlainLoginModule required username="user" password="pass";
   topics:
     orders:
       topic-name: orders.v1

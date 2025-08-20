@@ -4,6 +4,11 @@
       "name": "kafka",
       "type": "com.example.dynamickafkaconsumers.config.TopicConsumerProperties",
       "sourceType": "com.example.dynamickafkaconsumers.config.TopicConsumerProperties"
+    },
+    {
+      "name": "kafka.security",
+      "type": "com.example.dynamickafkaconsumers.config.SecurityProperties",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SecurityProperties"
     }
   ],
   "properties": [
@@ -12,6 +17,61 @@
       "type": "java.lang.String",
       "sourceType": "com.example.dynamickafkaconsumers.config.TopicConsumerProperties",
       "defaultValue": "localhost:9092"
+    },
+    {
+      "name": "kafka.security.protocol",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SecurityProperties"
+    },
+    {
+      "name": "kafka.security.sasl-jaas-config",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SecurityProperties"
+    },
+    {
+      "name": "kafka.security.sasl-mechanism",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SecurityProperties"
+    },
+    {
+      "name": "kafka.security.ssl-endpoint-identification-algorithm",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SecurityProperties"
+    },
+    {
+      "name": "kafka.security.ssl-key-password",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SecurityProperties"
+    },
+    {
+      "name": "kafka.security.ssl-keystore-location",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SecurityProperties"
+    },
+    {
+      "name": "kafka.security.ssl-keystore-password",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SecurityProperties"
+    },
+    {
+      "name": "kafka.security.ssl-keystore-type",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SecurityProperties"
+    },
+    {
+      "name": "kafka.security.ssl-truststore-location",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SecurityProperties"
+    },
+    {
+      "name": "kafka.security.ssl-truststore-password",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SecurityProperties"
+    },
+    {
+      "name": "kafka.security.ssl-truststore-type",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SecurityProperties"
     },
     {
       "name": "kafka.topics",
