@@ -1,4 +1,3 @@
 /workspace/dynamic-kafka-consumers/src/main/java/com/example/dynamickafkaconsumers/DynamicKafkaConsumersApplication.java
 /workspace/dynamic-kafka-consumers/src/main/java/com/example/dynamickafkaconsumers/config/TopicConsumerProperties.java
 /workspace/dynamic-kafka-consumers/src/main/java/com/example/dynamickafkaconsumers/kafka/DynamicKafkaConsumerManager.java
-/workspace/dynamic-kafka-consumers/src/main/java/com/example/dynamickafkaconsumers/web/ConsumerAdminController.java

@@ -1,6 +1,3 @@
-server:
-  port: 8080
-
 kafka:
   bootstrap-servers: localhost:9092
   topics:
@@ -13,6 +10,8 @@ kafka:
       poll-timeout: 3s
       properties:
         max.poll.records: "100"
+      start:
+        timestamp-ms: 1719427200000
     payments:
       topic-name: payments.v1
       group-id: payments-consumer-group
@@ -22,6 +21,10 @@ kafka:
       poll-timeout: 3s
       properties:
         max.poll.records: "100"
+      start:
+        partition-to-offset:
+          "0": 123
+          "1": 456
 
 logging:
   level:
