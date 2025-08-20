@@ -39,6 +39,7 @@ public class TopicConsumerProperties {
         private Integer concurrency = 1;
         private Duration pollTimeout = Duration.ofSeconds(3);
         private Map<String, String> properties = new HashMap<>();
+        private StartPosition start;
 
         public String getTopicName() {
             return topicName;
@@ -94,6 +95,35 @@ public class TopicConsumerProperties {
 
         public void setProperties(Map<String, String> properties) {
             this.properties = properties;
+        }
+
+        public StartPosition getStart() {
+            return start;
+        }
+
+        public void setStart(StartPosition start) {
+            this.start = start;
+        }
+    }
+
+    public static class StartPosition {
+        private Long timestampMs;
+        private Map<Integer, Long> partitionToOffset = new HashMap<>();
+
+        public Long getTimestampMs() {
+            return timestampMs;
+        }
+
+        public void setTimestampMs(Long timestampMs) {
+            this.timestampMs = timestampMs;
+        }
+
+        public Map<Integer, Long> getPartitionToOffset() {
+            return partitionToOffset;
+        }
+
+        public void setPartitionToOffset(Map<Integer, Long> partitionToOffset) {
+            this.partitionToOffset = partitionToOffset;
         }
     }
 }

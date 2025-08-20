@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.dynamickafkaconsumers.config.TopicConsumerProperties;
 import com.example.dynamickafkaconsumers.config.TopicConsumerProperties.TopicConfig;
+import com.example.dynamickafkaconsumers.config.TopicConsumerProperties.StartPosition;
 
 @Service
 public class DynamicKafkaConsumerManager {
@@ -105,6 +106,15 @@ public class DynamicKafkaConsumerManager {
         container.start();
         topicToContainer.put(topicKey, container);
         log.info("Started consumer for {} -> topic {}", topicKey, config.getTopicName());
+    }
+
+    public synchronized void startAllFromProperties() {
+        topicConsumerProperties.getTopics().forEach((topicKey, config) -> {
+            StartPosition start = config.getStart();
+            Long ts = start == null ? null : start.getTimestampMs();
+            Map<Integer, Long> offsets = start == null ? null : start.getPartitionToOffset();
+            startConsumer(topicKey, ts, offsets);
+        });
     }
 
     public synchronized void stopConsumer(String topicKey) {
