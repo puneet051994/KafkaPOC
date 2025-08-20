@@ -40,6 +40,7 @@ public class TopicConsumerProperties {
         private Duration pollTimeout = Duration.ofSeconds(3);
         private Map<String, String> properties = new HashMap<>();
         private StartPosition start;
+        private String handlerBean;
 
         public String getTopicName() {
             return topicName;
@@ -103,6 +104,14 @@ public class TopicConsumerProperties {
 
         public void setStart(StartPosition start) {
             this.start = start;
+        }
+
+        public String getHandlerBean() {
+            return handlerBean;
+        }
+
+        public void setHandlerBean(String handlerBean) {
+            this.handlerBean = handlerBean;
         }
     }
 

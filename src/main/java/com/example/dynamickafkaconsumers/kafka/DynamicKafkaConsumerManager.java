@@ -18,6 +18,7 @@ import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.AcknowledgingConsumerAwareMessageListener;
@@ -29,6 +30,7 @@ import org.springframework.stereotype.Service;
 import com.example.dynamickafkaconsumers.config.TopicConsumerProperties;
 import com.example.dynamickafkaconsumers.config.TopicConsumerProperties.TopicConfig;
 import com.example.dynamickafkaconsumers.config.TopicConsumerProperties.StartPosition;
+import com.example.dynamickafkaconsumers.processing.MessageHandler;
 
 @Service
 public class DynamicKafkaConsumerManager {
@@ -36,10 +38,12 @@ public class DynamicKafkaConsumerManager {
     private static final Logger log = LoggerFactory.getLogger(DynamicKafkaConsumerManager.class);
 
     private final TopicConsumerProperties topicConsumerProperties;
+    private final BeanFactory beanFactory;
     private final Map<String, ConcurrentMessageListenerContainer<String, String>> topicToContainer = new ConcurrentHashMap<>();
 
-    public DynamicKafkaConsumerManager(TopicConsumerProperties topicConsumerProperties) {
+    public DynamicKafkaConsumerManager(TopicConsumerProperties topicConsumerProperties, BeanFactory beanFactory) {
         this.topicConsumerProperties = topicConsumerProperties;
+        this.beanFactory = beanFactory;
     }
 
     public synchronized void startConsumer(String topicKey) {
@@ -80,9 +84,14 @@ public class DynamicKafkaConsumerManager {
         containerProps.setGroupId(config.getGroupId());
         containerProps.setAckMode(config.isEnableAutoCommit() ? ContainerProperties.AckMode.BATCH : ContainerProperties.AckMode.MANUAL);
 
+        MessageHandler handler = resolveHandler(config.getHandlerBean());
         containerProps.setMessageListener((AcknowledgingConsumerAwareMessageListener<String, String>) (record, acknowledgment, consumer) -> {
             try {
-                log.info("[{}] Consumed record topic={} partition={} offset={} key={} value={}", topicKey, record.topic(), record.partition(), record.offset(), record.key(), record.value());
+                if (handler != null) {
+                    handler.handle((ConsumerRecord<String, String>) record);
+                } else {
+                    log.info("[{}] Consumed record topic={} partition={} offset={} key={} value={}", topicKey, record.topic(), record.partition(), record.offset(), record.key(), record.value());
+                }
                 if (!config.isEnableAutoCommit()) {
                     acknowledgment.acknowledge();
                 }
@@ -106,6 +115,18 @@ public class DynamicKafkaConsumerManager {
         container.start();
         topicToContainer.put(topicKey, container);
         log.info("Started consumer for {} -> topic {}", topicKey, config.getTopicName());
+    }
+
+    private MessageHandler resolveHandler(String handlerBeanName) {
+        if (handlerBeanName == null || handlerBeanName.isBlank()) {
+            return null;
+        }
+        try {
+            return beanFactory.getBean(handlerBeanName, MessageHandler.class);
+        } catch (Exception e) {
+            log.warn("Handler bean '{}' not found; falling back to default logging handler", handlerBeanName);
+            return null;
+        }
     }
 
     public synchronized void startAllFromProperties() {
