@@ -1,0 +1,30 @@
+server:
+  port: 8080
+
+kafka:
+  bootstrap-servers: localhost:9092
+  topics:
+    orders:
+      topic-name: orders.v1
+      group-id: orders-consumer-group
+      enable-auto-commit: false
+      auto-offset-reset: earliest
+      concurrency: 1
+      poll-timeout: 3s
+      properties:
+        max.poll.records: "100"
+    payments:
+      topic-name: payments.v1
+      group-id: payments-consumer-group
+      enable-auto-commit: false
+      auto-offset-reset: latest
+      concurrency: 1
+      poll-timeout: 3s
+      properties:
+        max.poll.records: "100"
+
+logging:
+  level:
+    root: INFO
+    com.example.dynamickafkaconsumers: DEBUG
+

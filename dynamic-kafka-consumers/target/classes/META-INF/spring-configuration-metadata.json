@@ -1,0 +1,23 @@
+{
+  "groups": [
+    {
+      "name": "kafka",
+      "type": "com.example.dynamickafkaconsumers.config.TopicConsumerProperties",
+      "sourceType": "com.example.dynamickafkaconsumers.config.TopicConsumerProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "kafka.bootstrap-servers",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dynamickafkaconsumers.config.TopicConsumerProperties",
+      "defaultValue": "localhost:9092"
+    },
+    {
+      "name": "kafka.topics",
+      "type": "java.util.Map<java.lang.String,com.example.dynamickafkaconsumers.config.TopicConsumerProperties$TopicConfig>",
+      "sourceType": "com.example.dynamickafkaconsumers.config.TopicConsumerProperties"
+    }
+  ],
+  "hints": []
+}
