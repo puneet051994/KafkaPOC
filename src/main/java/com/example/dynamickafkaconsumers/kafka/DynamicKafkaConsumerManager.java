@@ -31,6 +31,7 @@ import com.example.dynamickafkaconsumers.config.TopicConsumerProperties;
 import com.example.dynamickafkaconsumers.config.TopicConsumerProperties.TopicConfig;
 import com.example.dynamickafkaconsumers.config.TopicConsumerProperties.StartPosition;
 import com.example.dynamickafkaconsumers.processing.MessageHandler;
+import com.example.dynamickafkaconsumers.config.SecurityProperties;
 
 @Service
 public class DynamicKafkaConsumerManager {
@@ -39,11 +40,13 @@ public class DynamicKafkaConsumerManager {
 
     private final TopicConsumerProperties topicConsumerProperties;
     private final BeanFactory beanFactory;
+    private final SecurityProperties securityProperties;
     private final Map<String, ConcurrentMessageListenerContainer<String, String>> topicToContainer = new ConcurrentHashMap<>();
 
-    public DynamicKafkaConsumerManager(TopicConsumerProperties topicConsumerProperties, BeanFactory beanFactory) {
+    public DynamicKafkaConsumerManager(TopicConsumerProperties topicConsumerProperties, BeanFactory beanFactory, SecurityProperties securityProperties) {
         this.topicConsumerProperties = topicConsumerProperties;
         this.beanFactory = beanFactory;
+        this.securityProperties = securityProperties;
     }
 
     public synchronized void startConsumer(String topicKey) {
@@ -68,9 +71,8 @@ public class DynamicKafkaConsumerManager {
         consumerProps.put(ConsumerConfig.GROUP_ID_CONFIG, Objects.requireNonNull(config.getGroupId(), "groupId required"));
         consumerProps.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, String.valueOf(config.isEnableAutoCommit()));
         consumerProps.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, Optional.ofNullable(config.getAutoOffsetReset()).orElse("latest"));
-        if (config.getProperties() != null) {
-            consumerProps.putAll(config.getProperties());
-        }
+        consumerProps.putAll(securityProperties.asKafkaProperties());
+        if (config.getProperties() != null) consumerProps.putAll(config.getProperties());
 
         DefaultKafkaConsumerFactory<String, String> consumerFactory = new DefaultKafkaConsumerFactory<>(consumerProps);
 
