@@ -8,6 +8,7 @@ kafka:
       auto-offset-reset: earliest
       concurrency: 1
       poll-timeout: 3s
+      handler-bean: ordersHandler
       properties:
         max.poll.records: "100"
       start:
@@ -19,6 +20,7 @@ kafka:
       auto-offset-reset: latest
       concurrency: 1
       poll-timeout: 3s
+      handler-bean: paymentsHandler
       properties:
         max.poll.records: "100"
       start:
