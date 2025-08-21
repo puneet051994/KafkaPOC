@@ -13,6 +13,8 @@ public class TopicConsumerProperties {
 
     private String bootstrapServers = "localhost:9092";
 
+    private Map<String, String> commonProperties = new HashMap<>();
+
     private Map<String, TopicConfig> topics = new HashMap<>();
 
     public String getBootstrapServers() {
@@ -29,6 +31,14 @@ public class TopicConsumerProperties {
 
     public void setTopics(Map<String, TopicConfig> topics) {
         this.topics = topics;
+    }
+
+    public Map<String, String> getCommonProperties() {
+        return commonProperties;
+    }
+
+    public void setCommonProperties(Map<String, String> commonProperties) {
+        this.commonProperties = commonProperties;
     }
 
     public static class TopicConfig {

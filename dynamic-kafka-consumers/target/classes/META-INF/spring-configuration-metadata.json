@@ -24,6 +24,11 @@
       "defaultValue": "localhost:9092"
     },
     {
+      "name": "kafka.common-properties",
+      "type": "java.util.Map<java.lang.String,java.lang.String>",
+      "sourceType": "com.example.dynamickafkaconsumers.config.TopicConsumerProperties"
+    },
+    {
       "name": "kafka.schema-registry.basic-auth-credentials-source",
       "type": "java.lang.String",
       "sourceType": "com.example.dynamickafkaconsumers.config.SchemaRegistryProperties"
