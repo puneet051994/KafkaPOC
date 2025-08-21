@@ -1,0 +1,52 @@
+kafka:
+  bootstrap-servers: <bootstrap-server>.confluent.cloud:9092
+  security:
+    protocol: SASL_SSL
+    ssl-endpoint-identification-algorithm: "https"
+    sasl-mechanism: PLAIN
+    sasl-jaas-config: org.apache.kafka.common.security.plain.PlainLoginModule required username="<api-key>" password="<api-secret>";
+  common-properties:
+    client.id: dynamic-consumers
+    metrics.recording.level: INFO
+    confluent.monitoring.interceptor.class: io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor
+  schema-registry:
+    url: "https://<sr-endpoint>.confluent.cloud"
+    basic-auth-credentials-source: "USER_INFO"
+    basic-auth-user-info: "<sr-api-key>:<sr-api-secret>"
+  topics:
+    orders:
+      topic-name: orders.v1
+      group-id: orders-consumer-group
+      enable-auto-commit: false
+      auto-offset-reset: earliest
+      concurrency: 1
+      poll-timeout: 3s
+      handler-bean: ordersHandler
+      key-deserializer-class: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer-class: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      properties:
+        max.poll.records: "100"
+        specific.avro.reader: "true"
+      start:
+        timestamp-ms: 1719427200000
+    payments:
+      topic-name: payments.v1
+      group-id: payments-consumer-group
+      enable-auto-commit: false
+      auto-offset-reset: latest
+      concurrency: 1
+      poll-timeout: 3s
+      handler-bean: paymentsHandler
+      key-deserializer-class: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer-class: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        max.poll.records: "100"
+      start:
+        partition-to-offset:
+          "0": 123
+          "1": 456
+
+logging:
+  level:
+    root: INFO
+    com.example.dynamickafkaconsumers: DEBUG

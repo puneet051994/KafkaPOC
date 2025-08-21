@@ -1,0 +1,108 @@
+{
+  "groups": [
+    {
+      "name": "kafka",
+      "type": "com.example.dynamickafkaconsumers.config.TopicConsumerProperties",
+      "sourceType": "com.example.dynamickafkaconsumers.config.TopicConsumerProperties"
+    },
+    {
+      "name": "kafka.schema-registry",
+      "type": "com.example.dynamickafkaconsumers.config.SchemaRegistryProperties",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SchemaRegistryProperties"
+    },
+    {
+      "name": "kafka.security",
+      "type": "com.example.dynamickafkaconsumers.config.SecurityProperties",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SecurityProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "kafka.bootstrap-servers",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dynamickafkaconsumers.config.TopicConsumerProperties",
+      "defaultValue": "localhost:9092"
+    },
+    {
+      "name": "kafka.common-properties",
+      "type": "java.util.Map<java.lang.String,java.lang.String>",
+      "sourceType": "com.example.dynamickafkaconsumers.config.TopicConsumerProperties"
+    },
+    {
+      "name": "kafka.schema-registry.basic-auth-credentials-source",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SchemaRegistryProperties"
+    },
+    {
+      "name": "kafka.schema-registry.basic-auth-user-info",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SchemaRegistryProperties"
+    },
+    {
+      "name": "kafka.schema-registry.url",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SchemaRegistryProperties"
+    },
+    {
+      "name": "kafka.security.protocol",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SecurityProperties"
+    },
+    {
+      "name": "kafka.security.sasl-jaas-config",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SecurityProperties"
+    },
+    {
+      "name": "kafka.security.sasl-mechanism",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SecurityProperties"
+    },
+    {
+      "name": "kafka.security.ssl-endpoint-identification-algorithm",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SecurityProperties"
+    },
+    {
+      "name": "kafka.security.ssl-key-password",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SecurityProperties"
+    },
+    {
+      "name": "kafka.security.ssl-keystore-location",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SecurityProperties"
+    },
+    {
+      "name": "kafka.security.ssl-keystore-password",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SecurityProperties"
+    },
+    {
+      "name": "kafka.security.ssl-keystore-type",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SecurityProperties"
+    },
+    {
+      "name": "kafka.security.ssl-truststore-location",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SecurityProperties"
+    },
+    {
+      "name": "kafka.security.ssl-truststore-password",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SecurityProperties"
+    },
+    {
+      "name": "kafka.security.ssl-truststore-type",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SecurityProperties"
+    },
+    {
+      "name": "kafka.topics",
+      "type": "java.util.Map<java.lang.String,com.example.dynamickafkaconsumers.config.TopicConsumerProperties$TopicConfig>",
+      "sourceType": "com.example.dynamickafkaconsumers.config.TopicConsumerProperties"
+    }
+  ],
+  "hints": []
+}
