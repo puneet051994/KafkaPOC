@@ -78,6 +78,7 @@ public class DynamicKafkaConsumerManager {
         consumerProps.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, Optional.ofNullable(config.getAutoOffsetReset()).orElse("latest"));
         consumerProps.putAll(securityProperties.asKafkaProperties());
         consumerProps.putAll(schemaRegistryProperties.asKafkaProperties());
+        if (topicConsumerProperties.getCommonProperties() != null) consumerProps.putAll(topicConsumerProperties.getCommonProperties());
         if (config.getProperties() != null) consumerProps.putAll(config.getProperties());
 
         DefaultKafkaConsumerFactory<String, Object> consumerFactory = new DefaultKafkaConsumerFactory<>(consumerProps);

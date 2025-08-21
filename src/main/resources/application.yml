@@ -1,26 +1,18 @@
 kafka:
-  bootstrap-servers: localhost:9092
+  bootstrap-servers: <bootstrap-server>.confluent.cloud:9092
   security:
-    # protocol: SSL or SASL_SSL
-    protocol: SSL
-    # Truststore (if using custom certs)
-    ssl-truststore-location: "/path/to/truststore.jks"
-    ssl-truststore-password: "changeit"
-    ssl-truststore-type: "JKS"
-    # Keystore (if mutual TLS is required)
-    ssl-keystore-location: "/path/to/keystore.jks"
-    ssl-keystore-password: "changeit"
-    ssl-keystore-type: "JKS"
-    ssl-key-password: "changeit"
-    # Disable hostname verification if needed (not recommended for prod)
-    ssl-endpoint-identification-algorithm: "HTTPS"
-    # For SASL (uncomment if using SASL_SSL)
-    # sasl-mechanism: PLAIN
-    # sasl-jaas-config: org.apache.kafka.common.security.plain.PlainLoginModule required username="user" password="pass";
+    protocol: SASL_SSL
+    ssl-endpoint-identification-algorithm: "https"
+    sasl-mechanism: PLAIN
+    sasl-jaas-config: org.apache.kafka.common.security.plain.PlainLoginModule required username="<api-key>" password="<api-secret>";
+  common-properties:
+    client.id: dynamic-consumers
+    metrics.recording.level: INFO
+    confluent.monitoring.interceptor.class: io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor
   schema-registry:
-    url: "https://schema-registry.example.com:8081"
+    url: "https://<sr-endpoint>.confluent.cloud"
     basic-auth-credentials-source: "USER_INFO"
-    basic-auth-user-info: "user:password"
+    basic-auth-user-info: "<sr-api-key>:<sr-api-secret>"
   topics:
     orders:
       topic-name: orders.v1
