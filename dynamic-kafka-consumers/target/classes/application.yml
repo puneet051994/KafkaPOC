@@ -17,6 +17,10 @@ kafka:
     # For SASL (uncomment if using SASL_SSL)
     # sasl-mechanism: PLAIN
     # sasl-jaas-config: org.apache.kafka.common.security.plain.PlainLoginModule required username="user" password="pass";
+  schema-registry:
+    url: "https://schema-registry.example.com:8081"
+    basic-auth-credentials-source: "USER_INFO"
+    basic-auth-user-info: "user:password"
   topics:
     orders:
       topic-name: orders.v1
@@ -26,8 +30,11 @@ kafka:
       concurrency: 1
       poll-timeout: 3s
       handler-bean: ordersHandler
+      key-deserializer-class: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer-class: io.confluent.kafka.serializers.KafkaAvroDeserializer
       properties:
         max.poll.records: "100"
+        specific.avro.reader: "true"
       start:
         timestamp-ms: 1719427200000
     payments:
@@ -38,6 +45,8 @@ kafka:
       concurrency: 1
       poll-timeout: 3s
       handler-bean: paymentsHandler
+      key-deserializer-class: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer-class: org.apache.kafka.common.serialization.StringDeserializer
       properties:
         max.poll.records: "100"
       start:
@@ -49,4 +58,3 @@ logging:
   level:
     root: INFO
     com.example.dynamickafkaconsumers: DEBUG
-

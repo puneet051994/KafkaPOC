@@ -32,6 +32,7 @@ import com.example.dynamickafkaconsumers.config.TopicConsumerProperties.TopicCon
 import com.example.dynamickafkaconsumers.config.TopicConsumerProperties.StartPosition;
 import com.example.dynamickafkaconsumers.processing.MessageHandler;
 import com.example.dynamickafkaconsumers.config.SecurityProperties;
+import com.example.dynamickafkaconsumers.config.SchemaRegistryProperties;
 
 @Service
 public class DynamicKafkaConsumerManager {
@@ -41,12 +42,14 @@ public class DynamicKafkaConsumerManager {
     private final TopicConsumerProperties topicConsumerProperties;
     private final BeanFactory beanFactory;
     private final SecurityProperties securityProperties;
-    private final Map<String, ConcurrentMessageListenerContainer<String, String>> topicToContainer = new ConcurrentHashMap<>();
+    private final SchemaRegistryProperties schemaRegistryProperties;
+    private final Map<String, ConcurrentMessageListenerContainer<String, Object>> topicToContainer = new ConcurrentHashMap<>();
 
-    public DynamicKafkaConsumerManager(TopicConsumerProperties topicConsumerProperties, BeanFactory beanFactory, SecurityProperties securityProperties) {
+    public DynamicKafkaConsumerManager(TopicConsumerProperties topicConsumerProperties, BeanFactory beanFactory, SecurityProperties securityProperties, SchemaRegistryProperties schemaRegistryProperties) {
         this.topicConsumerProperties = topicConsumerProperties;
         this.beanFactory = beanFactory;
         this.securityProperties = securityProperties;
+        this.schemaRegistryProperties = schemaRegistryProperties;
     }
 
     public synchronized void startConsumer(String topicKey) {
@@ -66,17 +69,20 @@ public class DynamicKafkaConsumerManager {
 
         Map<String, Object> consumerProps = new HashMap<>();
         consumerProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, topicConsumerProperties.getBootstrapServers());
-        consumerProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        consumerProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        Object keyDeser = config.getKeyDeserializerClass() != null ? config.getKeyDeserializerClass() : StringDeserializer.class;
+        Object valDeser = config.getValueDeserializerClass() != null ? config.getValueDeserializerClass() : StringDeserializer.class;
+        consumerProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, keyDeser);
+        consumerProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, valDeser);
         consumerProps.put(ConsumerConfig.GROUP_ID_CONFIG, Objects.requireNonNull(config.getGroupId(), "groupId required"));
         consumerProps.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, String.valueOf(config.isEnableAutoCommit()));
         consumerProps.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, Optional.ofNullable(config.getAutoOffsetReset()).orElse("latest"));
         consumerProps.putAll(securityProperties.asKafkaProperties());
+        consumerProps.putAll(schemaRegistryProperties.asKafkaProperties());
         if (config.getProperties() != null) consumerProps.putAll(config.getProperties());
 
-        DefaultKafkaConsumerFactory<String, String> consumerFactory = new DefaultKafkaConsumerFactory<>(consumerProps);
+        DefaultKafkaConsumerFactory<String, Object> consumerFactory = new DefaultKafkaConsumerFactory<>(consumerProps);
 
-        ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        ConcurrentKafkaListenerContainerFactory<String, Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory);
         factory.setConcurrency(Optional.ofNullable(config.getConcurrency()).orElse(1));
         factory.getContainerProperties().setAckMode(config.isEnableAutoCommit() ? ContainerProperties.AckMode.BATCH : ContainerProperties.AckMode.MANUAL);
@@ -87,10 +93,10 @@ public class DynamicKafkaConsumerManager {
         containerProps.setAckMode(config.isEnableAutoCommit() ? ContainerProperties.AckMode.BATCH : ContainerProperties.AckMode.MANUAL);
 
         MessageHandler handler = resolveHandler(config.getHandlerBean());
-        containerProps.setMessageListener((AcknowledgingConsumerAwareMessageListener<String, String>) (record, acknowledgment, consumer) -> {
+        containerProps.setMessageListener((AcknowledgingConsumerAwareMessageListener<String, Object>) (record, acknowledgment, consumer) -> {
             try {
                 if (handler != null) {
-                    handler.handle((ConsumerRecord<String, String>) record);
+                    handler.handle((ConsumerRecord<String, Object>) record);
                 } else {
                     log.info("[{}] Consumed record topic={} partition={} offset={} key={} value={}", topicKey, record.topic(), record.partition(), record.offset(), record.key(), record.value());
                 }
@@ -102,7 +108,7 @@ public class DynamicKafkaConsumerManager {
             }
         });
 
-        ConcurrentMessageListenerContainer<String, String> container = new ConcurrentMessageListenerContainer<>(consumerFactory, containerProps);
+        ConcurrentMessageListenerContainer<String, Object> container = new ConcurrentMessageListenerContainer<>(consumerFactory, containerProps);
         if (config.getConcurrency() != null && config.getConcurrency() > 1) {
             container.setConcurrency(config.getConcurrency());
         }
@@ -141,7 +147,7 @@ public class DynamicKafkaConsumerManager {
     }
 
     public synchronized void stopConsumer(String topicKey) {
-        ConcurrentMessageListenerContainer<String, String> container = topicToContainer.remove(topicKey);
+        ConcurrentMessageListenerContainer<String, Object> container = topicToContainer.remove(topicKey);
         if (container != null) {
             container.stop();
             log.info("Stopped consumer for {}", topicKey);

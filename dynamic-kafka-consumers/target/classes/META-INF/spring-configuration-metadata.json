@@ -6,6 +6,11 @@
       "sourceType": "com.example.dynamickafkaconsumers.config.TopicConsumerProperties"
     },
     {
+      "name": "kafka.schema-registry",
+      "type": "com.example.dynamickafkaconsumers.config.SchemaRegistryProperties",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SchemaRegistryProperties"
+    },
+    {
       "name": "kafka.security",
       "type": "com.example.dynamickafkaconsumers.config.SecurityProperties",
       "sourceType": "com.example.dynamickafkaconsumers.config.SecurityProperties"
@@ -17,6 +22,21 @@
       "type": "java.lang.String",
       "sourceType": "com.example.dynamickafkaconsumers.config.TopicConsumerProperties",
       "defaultValue": "localhost:9092"
+    },
+    {
+      "name": "kafka.schema-registry.basic-auth-credentials-source",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SchemaRegistryProperties"
+    },
+    {
+      "name": "kafka.schema-registry.basic-auth-user-info",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SchemaRegistryProperties"
+    },
+    {
+      "name": "kafka.schema-registry.url",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dynamickafkaconsumers.config.SchemaRegistryProperties"
     },
     {
       "name": "kafka.security.protocol",
