@@ -10,7 +10,7 @@ public class OrdersMessageHandler implements MessageHandler {
     private static final Logger log = LoggerFactory.getLogger(OrdersMessageHandler.class);
 
     @Override
-    public void handle(ConsumerRecord<String, String> record) throws Exception {
+    public void handle(ConsumerRecord<String, Object> record) throws Exception {
         log.info("[Orders] Processing key={} value={} partition={} offset={}", record.key(), record.value(), record.partition(), record.offset());
         // TODO: add domain-specific processing for orders
     }

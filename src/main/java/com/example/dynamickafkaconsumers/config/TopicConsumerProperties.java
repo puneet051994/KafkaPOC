@@ -41,6 +41,8 @@ public class TopicConsumerProperties {
         private Map<String, String> properties = new HashMap<>();
         private StartPosition start;
         private String handlerBean;
+        private String keyDeserializerClass;   // e.g. org.apache.kafka.common.serialization.StringDeserializer
+        private String valueDeserializerClass; // e.g. io.confluent.kafka.serializers.KafkaAvroDeserializer
 
         public String getTopicName() {
             return topicName;
@@ -112,6 +114,22 @@ public class TopicConsumerProperties {
 
         public void setHandlerBean(String handlerBean) {
             this.handlerBean = handlerBean;
+        }
+
+        public String getKeyDeserializerClass() {
+            return keyDeserializerClass;
+        }
+
+        public void setKeyDeserializerClass(String keyDeserializerClass) {
+            this.keyDeserializerClass = keyDeserializerClass;
+        }
+
+        public String getValueDeserializerClass() {
+            return valueDeserializerClass;
+        }
+
+        public void setValueDeserializerClass(String valueDeserializerClass) {
+            this.valueDeserializerClass = valueDeserializerClass;
         }
     }
 

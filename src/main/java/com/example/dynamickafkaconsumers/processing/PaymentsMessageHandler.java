@@ -10,7 +10,7 @@ public class PaymentsMessageHandler implements MessageHandler {
     private static final Logger log = LoggerFactory.getLogger(PaymentsMessageHandler.class);
 
     @Override
-    public void handle(ConsumerRecord<String, String> record) throws Exception {
+    public void handle(ConsumerRecord<String, Object> record) throws Exception {
         log.info("[Payments] Processing key={} value={} partition={} offset={}", record.key(), record.value(), record.partition(), record.offset());
         // TODO: add domain-specific processing for payments
     }
